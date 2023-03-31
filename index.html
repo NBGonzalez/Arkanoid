@@ -45,13 +45,8 @@
     var maxX = lienzo.width;
 	var maxY = lienzo.height;
 
-    // Dimensiones del Racket
-    var ANCHOSPRITE = 49;
-    var ALTOSPRITE = 10;
-
-    // Dimensiones de la bola;
-    var ANCHOSPRITEBALL = 12;
-    var ALTOSPRITEBALL = 10;
+    // Boton de empezar a jugar
+    var jugar = false;
 
     // Cargamos todas las imagenes
     var imagenBall = new Image();
@@ -99,7 +94,7 @@
     var velMaxBola = 2;
     // Atr Power Up
     var x2 = {x: Math.random()*600, y: 0, ancho: 33, alto: 26, velX2Y: 1};
-    var spawnPowerUp = 2;
+    var spawnPowerUp = 5;
     var yaSpawnee = 0;
     var multiplier = 1;
 
@@ -199,6 +194,7 @@
             nArray++;
         }
     }
+    
 
     
     cargaFondo();
@@ -242,7 +238,7 @@
         }
 
         //Carga la nueva posicion del racket y la dibuja
-        contexto.drawImage(imagenRacket,racket.x,racket.y,ANCHOSPRITE,ALTOSPRITE );
+        contexto.drawImage(imagenRacket,racket.x,racket.y,racket.ancho,racket.alto );
         
         // Carga bola
         contexto.drawImage(imagenBall,ball.x,ball.y,ball.ancho,ball.alto);
@@ -263,11 +259,15 @@
         }
         
         //Controlamos el powerUp x2
-        if((destruidos >= spawnPowerUp))
+        if((destruidos >= spawnPowerUp) && (yaSpawnee == 1))
+        {
+            yaSpawnee = 0;
+        }
+        if((destruidos >= spawnPowerUp) && (yaSpawnee == 0))
         {
             contexto.drawImage(dblPoints,x2.x,x2.y += x2.velX2Y,x2.ancho,x2.alto);
             
-            if((seSolapan(x2, racket) != -1) && (yaSpawnee == 0)){
+            if((seSolapan(x2, racket) != -1)){
                 
                 soundPowerUp.play();
                 spawnPowerUp = spawnPowerUp + 5;
@@ -275,15 +275,26 @@
                 x2.y = 0;
                 console.log("x2 points");
                 multiplier = 2;
+
                 intervalo = setTimeout("PowerUpDuration();", 5000);
             }
-            else if((x2.y > 690) && (yaSpawnee == 0)){
-                yaSpawnee = 1;
+            else if((x2.y > 690)){
                 x2.x = Math.random() * 600;
                 x2.y = 0;
                 spawnPowerUp = spawnPowerUp + 5;
             }
         }
+        /*
+        if(jugar == false)
+        {
+            ball.velocidadY = 0;
+            ball.velocidadX = 0;
+            if(lienzo.mo))
+            {
+                jugar = true;
+            }
+        }
+        */
 
         //Tasa de refresco por fotograma (10ms);
         setTimeout("cargaFondo();",10);
@@ -294,6 +305,7 @@
         multiplier = 1;
         yaSpawnee = 0;
         console.log("x1 points");
+        clearTimeout(intervalo);
     }
 
     // Funcion que comprueba con que entra en contacto la pelota
@@ -330,7 +342,7 @@
 
         if(seSolapan(ball,racket) >= 0)
         {
-            ball.velocidadY = -ball.velocidadY*1;
+            ball.velocidadY = -ball.velocidadY*1.05;
             boing.play();
         }
         else if((ball.y + ball.alto) >= maxY)
@@ -460,7 +472,8 @@
             ball.velocidadX = 0;
             ball.velocidadY = 0;
             contexto.drawImage(gameOver,0,0,maxX,maxY);
-            spawnPowerUp = 0;
+            destruidos = 0
+            clearTimeout(intervalo);
 
             if(play1TimeLose == 0)
             {
@@ -482,7 +495,7 @@
 		}
 		else if (e.keyCode == '39')
 		{
-            if(racket.x + ANCHOSPRITE < maxX){
+            if(racket.x + racket.ancho < maxX){
                 racket.x += 15;
             }
 		}
