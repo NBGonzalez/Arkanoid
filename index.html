@@ -21,8 +21,8 @@
 <body style="background-color: lightslategray;" onload = "cargaFondo()";>
     <b><p id="score" style = "text-align:center; color:rgb(207, 255, 213)"> SCORE: </p></b>
     <b><p style = "color:rgb(207, 255, 213)"> Creado por: </p></b>
-    <b><p style = "color:rgb(207, 255, 213)"> - Néstor Bermejillo González  50253536-P </p></b>
-    <b><p style = "color:rgb(207, 255, 213)"> - Pablo Prior Molina  02587712-M </p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> - Néstor Bermejillo González - Linkedin: <a href="https://www.linkedin.com/in/nestor-bermejillo-gonzalez-101b53182/">Click aqui!</a></p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> - Pablo Prior Molina</p></b>
     <p></p>
     <b><p style = "color:rgb(207, 255, 213)"> Sonidos usados: https://freesound.org/ </p></b>
     <b><p style = "color:rgb(207, 255, 213)"> Imagenes usadas: Propias y facilitadas en los recursos de la practica. </p></b>
@@ -94,7 +94,8 @@
     var racket = {x : maxX/2, y : maxY-46, ancho: 33, alto : 10};
     racket.conRaton = false;
     // Atr de la bola
-    var ball = {x : maxX/2, y : maxY-56, velocidadX : 0, velocidadY : 1.5};
+    var ball = {x : maxX/2, y : maxY-56, velocidadX : 0, velocidadY : 1.5, ancho: 12, alto : 10};
+    var velMaxBola = 2;
     // Atr Power Up
     var x2 = {x: Math.random()*600, y: 0, ancho: 33, alto: 26, velX2Y: 1};
     var spawnPowerUp = 2;
@@ -243,7 +244,7 @@
         contexto.drawImage(imagenRacket,racket.x,racket.y,ANCHOSPRITE,ALTOSPRITE );
         
         // Carga bola
-        contexto.drawImage(imagenBall,ball.x,ball.y,ANCHOSPRITEBALL,ALTOSPRITEBALL);
+        contexto.drawImage(imagenBall,ball.x,ball.y,ball.ancho,ball.alto);
         actualizaPosicion();
         pintaPalos();
 
@@ -295,23 +296,23 @@
     }
 
     // Funcion que comprueba con que entra en contacto la pelota
-    function seSolapan(ball,racket)
+    function seSolapan(A,racket)
     {
         var izq = {x : racket.x, y : racket.y, ancho : racket.ancho/3, alto : racket.alto};
         var centro = {x : racket.x + racket.ancho / 3, y : racket.y, ancho : racket.ancho / 3, alto : racket.alto};
         var dch = {x : racket.x + (racket.ancho/3)*2, y : racket.y, ancho : racket.ancho / 3, alto : racket.alto};
 
-        if((ball.y + ALTOSPRITEBALL < izq.y || izq.y+izq.alto < ball.y || ball.x+ANCHOSPRITEBALL < izq.x || izq.x+izq.ancho < ball.x) == false)
+        if((A.y + A.alto < izq.y || izq.y+izq.alto < A.y || A.x+A.ancho < izq.x || izq.x+izq.ancho < A.x) == false)
         {
             return 0;
         }
         else
-        if((ball.y + ALTOSPRITEBALL < centro.y || centro.y+centro.alto < ball.y || ball.x+ANCHOSPRITEBALL < centro.x || centro.x+centro.ancho < ball.x) == false)
+        if((A.y + A.alto < centro.y || centro.y+centro.alto < A.y || A.x+A.ancho < centro.x || centro.x+centro.ancho < A.x) == false)
         {
             return 1;
         }
         else
-        if((ball.y + ALTOSPRITEBALL < dch.y || dch.y+dch.alto < ball.y || ball.x+ANCHOSPRITEBALL < dch.x || dch.x+dch.ancho < ball.x) == false)
+        if((A.y + A.alto < dch.y || dch.y+dch.alto < A.y || ball.x+A.ancho < dch.x || dch.x+dch.ancho < A.x) == false)
         {
             return 2;
         }
@@ -328,10 +329,10 @@
 
         if(seSolapan(ball,racket) >= 0)
         {
-            ball.velocidadY = -ball.velocidadY*1.25;
+            ball.velocidadY = -ball.velocidadY*1;
             boing.play();
         }
-        else if((ball.y + ALTOSPRITEBALL) >= maxY)
+        else if((ball.y + ball.alto) >= maxY)
         {
             ball.velocidadY = -ball.velocidadY;
         }
@@ -339,7 +340,7 @@
         for(let cont = 0; cont < 9; cont++){
             if(arrayGreen[cont].vida == 1){
                 if(seSolapan(ball, arrayGreen[cont]) >= 0){
-                    ball.velocidadY = -ball.velocidadY*1.25;
+                    ball.velocidadY = -ball.velocidadY*1.05;
                     arrayGreen[cont].vida --;
                     destruidos++;
                     puntuacion += (sumaPuntos * multiplier);
@@ -352,7 +353,7 @@
         for(let cont = 0; cont < 9; cont++){
             if(arrayPink[cont].vida == 1){
                 if(seSolapan(ball, arrayPink[cont]) >= 0){
-                    ball.velocidadY = -ball.velocidadY*1.25;
+                    ball.velocidadY = -ball.velocidadY*1.05;
                     arrayPink[cont].vida --;
                     destruidos++;
                     puntuacion += (sumaPuntos * multiplier);
@@ -365,7 +366,7 @@
         for(let cont = 0; cont < 9; cont++){
             if(arrayBlue[cont].vida != 0){
                 if(seSolapan(ball, arrayBlue[cont]) >= 0){
-                    ball.velocidadY = -ball.velocidadY*1.25;
+                    ball.velocidadY = -ball.velocidadY*1.05;
                     arrayBlue[cont].vida --;
                     destruidos++;
                     puntuacion += (sumaPuntos * multiplier);
@@ -378,7 +379,7 @@
         for(let cont = 0; cont < 9; cont++){
             if(arrayYellow[cont].vida != 0){
                 if(seSolapan(ball, arrayYellow[cont]) >= 0){
-                    ball.velocidadY = -ball.velocidadY*1.25;
+                    ball.velocidadY = -ball.velocidadY*1.05;
                     arrayYellow[cont].vida --;
                     destruidos++;
                     puntuacion += (sumaPuntos * multiplier);
@@ -391,7 +392,7 @@
         for(let cont = 0; cont < 9; cont++){
             if(arrayRed[cont].vida != 0){
                 if(seSolapan(ball, arrayRed[cont]) >= 0){
-                    ball.velocidadY = -ball.velocidadY*1.25;
+                    ball.velocidadY = -ball.velocidadY*1.05;
                     arrayRed[cont].vida --;
                     destruidos++;
                     puntuacion += (sumaPuntos * multiplier);
@@ -404,7 +405,7 @@
         for(let cont = 0; cont < 9; cont++){
             if(arrayGray[cont].vida != 0){
                 if(seSolapan(ball, arrayGray[cont]) >= 0){
-                    ball.velocidadY = -ball.velocidadY*1.25;
+                    ball.velocidadY = -ball.velocidadY*1.05;
                     arrayGray[cont].color = "lightgray";
                     arrayGray[cont].vida --;
                     destruidos++;
@@ -419,13 +420,13 @@
         document.getElementById("score").innerHTML = textScore;
 
         // Limites de velocidad
-        if (ball.velocidadY*3 > 8)
+        if (ball.velocidadY >= velMaxBola)
         {
-            ball.velocidadY = 8/3;
+            ball.velocidadY = velMaxBola;
         }
-        if(ball.velocidadY*3 < -8)
+        if(ball.velocidadY < -velMaxBola)
         {
-            ball.velocidadY = -8/3;
+            ball.velocidadY = -velMaxBola;
         }
 
         /////////////////////////////
@@ -441,19 +442,19 @@
         {
             ball.velocidadX = Math.abs(ball.velocidadY);
         }
-        else if((ball.x + ANCHOSPRITEBALL) >= maxX || (ball.x < 0))
+        else if((ball.x + ball.ancho) >= maxX || (ball.x < 0))
         {
             ball.velocidadX = -ball.velocidadX;
             boing.play();
         }
-        else if((ball.y + ALTOSPRITEBALL <= 0))
+        else if((ball.y + ball.alto <= 0))
         {
             ball.velocidadY = -ball.velocidadY;
             boing.play();
         }
 
         // Se para si pierdes;
-        else if (ball.y + ALTOSPRITEBALL >= maxY)
+        else if (ball.y + ball.alto >= maxY)
         {
             ball.velocidadX = 0;
             ball.velocidadY = 0;
