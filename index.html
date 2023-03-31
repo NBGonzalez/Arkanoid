@@ -5,17 +5,26 @@
 <meta charset="UTF-8" />
 
 <style>
-      canvas {
+    canvas {
         margin: 0px;
         padding: 0px;
 		border:1px solid #000000;
 		background-color: lightgray;
-      }
+    }
+      .contenedor{
+        display: flex;
+    }
+
+      .contenedor{
+        margin-right: 10px;
+    }
 </style>
 </head>
-
-<div style = "text-align:center;">
+<div class = "contenedor">
+    <img src = "movement.png">
     <canvas id="lienzo" width="600" height="669"></canvas>
+    <img src = "enjoy.png">
+    
 </div>
 
 <body style="background-color: lightslategray;" onload = "cargaFondo()";>
@@ -64,6 +73,9 @@
     var imagen = new Image();
     imagen.src = "hexagon_pattern.png";
 
+    var startImage = new Image();
+    startImage.src = "start.png";
+
     var imagenTop = new Image();
     var imagenLeft = new Image();
     var imagenRight = new Image();
@@ -90,7 +102,7 @@
     var racket = {x : maxX/2, y : maxY-46, ancho: 49, alto : 10};
     racket.conRaton = false;
     // Atr de la bola
-    var ball = {x : maxX/2, y : maxY-56, velocidadX : 0, velocidadY : 1.5, ancho: 12, alto : 10};
+    var ball = {x : maxX/2 + 20, y : maxY-58, velocidadX : 0, velocidadY : 1.5, ancho: 12, alto : 10};
     var velMaxBola = 2;
     // Atr Power Up
     var x2 = {x: Math.random()*600, y: 0, ancho: 33, alto: 26, velX2Y: 1};
@@ -284,17 +296,19 @@
                 spawnPowerUp = spawnPowerUp + 5;
             }
         }
-        /*
+        
         if(jugar == false)
         {
             ball.velocidadY = 0;
             ball.velocidadX = 0;
-            if(lienzo.mo))
-            {
+            contexto.drawImage(startImage,0,0,maxX,maxY);
+            lienzo.addEventListener("mousedown", function empezar(e){
                 jugar = true;
-            }
+                ball.velocidadY = 1.5;
+                lienzo.removeEventListener("mousedown", empezar)
+            })
         }
-        */
+        
 
         //Tasa de refresco por fotograma (10ms);
         setTimeout("cargaFondo();",10);
