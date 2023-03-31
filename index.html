@@ -29,13 +29,13 @@
 
 <body style="background-color: lightslategray;" onload = "cargaFondo()";>
     <b><p id="score" style = "text-align:center; color:rgb(207, 255, 213)"> SCORE: </p></b>
-    <b><p style = "color:rgb(207, 255, 213)"> Creado por: </p></b>
-    <b><p style = "color:rgb(207, 255, 213)"> - Néstor Bermejillo González - Linkedin: <a href="https://www.linkedin.com/in/nestor-bermejillo-gonzalez-101b53182/">Click aqui!</a></p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> Created by: </p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> - Néstor Bermejillo González - Linkedin: <a href="https://www.linkedin.com/in/nestor-bermejillo-gonzalez-101b53182/">Click here!</a></p></b>
     <b><p style = "color:rgb(207, 255, 213)"> - Pablo Prior Molina</p></b>
     <p></p>
-    <b><p style = "color:rgb(207, 255, 213)"> Sonidos usados: https://freesound.org/ </p></b>
-    <b><p style = "color:rgb(207, 255, 213)"> Imagenes usadas: Propias y facilitadas en los recursos de la practica. </p></b>
-    <b><p style = "color:rgb(207, 255, 213)"> Actualizacion 4: 31/03/2023 - 14:10 </p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> Sounds: https://freesound.org/ </p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> Images: Néstor Bermejillo González, and Universidad Rey Juan Carlos </p></b>
+    <b><p style = "color:rgb(207, 255, 213)"> Last Update: 31/03/2023 - 17:10 </p></b>
 
 <script>
 
@@ -494,6 +494,26 @@
                 youLose.play();
                 play1TimeLose++;
             }
+            lienzo.addEventListener("mousedown", function retry(e){
+                //Restablecemos valores
+                ball.velocidadY = 1.5;
+                racket.x = maxX/2;
+                racket.y = maxY-46;
+                ball.x = maxX/2 + 20;
+                ball.y = maxY-58
+                play1TimeLose = 0;
+                //Restablecemos las vidas de los palos
+                for(let i = 0; i < 9; i++){
+                    arrayGray[i].vida = 1
+                    arrayBlue[i].vida = 1
+                    arrayGreen[i].vida = 1
+                    arrayPink[i].vida = 1
+                    arrayRed[i].vida = 1
+                    arrayYellow[i].vida = 1
+                }
+                lienzo.removeEventListener("mousedown", retry)
+            })
+            
         }
         ball.x += ball.velocidadX;
     }
